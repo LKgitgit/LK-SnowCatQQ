@@ -127,7 +127,7 @@ export async function InitWebUi (logger: ILogWrapper, pathWrapper: SnowCatPathWr
   // 优先使用环境变量覆盖 Token
   if (process.env['NAPCAT_WEBUI_SECRET_KEY'] && config.token !== process.env['NAPCAT_WEBUI_SECRET_KEY']) {
     await WebUiConfig.UpdateWebUIConfig({ token: process.env['NAPCAT_WEBUI_SECRET_KEY'] });
-    logger.log(`[SnowCat] [WebUi] 检测到环境变量配置，已更新 WebUI Token 为 ${process.env['NAPCAT_WEBUI_SECRET_KEY']}`);
+    logger.log('[SnowCat] WebUI Token 已更新');
     config = await WebUiConfig.GetWebUIConfig();
   } else if (config.token === 'napcat' || !config.token) {
     // 只有没设置环境变量，且是默认密码时，才生成随机密码

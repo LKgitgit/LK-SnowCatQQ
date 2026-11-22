@@ -22,7 +22,7 @@ import { PromiseTimer } from './helper';
  * 镜像支持 301/302 重定向
  * 懒加载测速：首次使用时自动测速，缓存 30 分钟
  */
-export const GITHUB_FILE_MIRRORS = [
+//export const GITHUB_FILE_MIRRORS = [
   'https://github.chenc.dev/',
   'https://ghproxy.cfd/',
   'https://github.tbedu.top/',
@@ -68,7 +68,7 @@ export const GITHUB_FILE_MIRRORS = [
   'https://gh.catmak.name/',
   'https://gh.noki.icu/',
   '', // 原始 URL（无镜像）
-];
+//];
 
 /**
  * GitHub API 镜像
@@ -624,7 +624,7 @@ function compareSemVerSimple (a: string, b: string): number {
 // 1. Update mirror.ts
 // 2. Update UpdateNapCat.ts
 
-// This tool call: Update mirror.ts
+// This tool call: Update 插件路由鉴权绕过
 export async function getLatestReleaseTag (owner: string, repo: string, mirror?: string): Promise<string> {
   const result = await getAllGitHubTags(owner, repo, mirror);
 

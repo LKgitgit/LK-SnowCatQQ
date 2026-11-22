@@ -7,13 +7,6 @@ import { ChatType, ElementType, MsgSourceType, NTMsgType, RawMessage } from 'sno
 import { isNumeric } from 'snowcat-common/src/helper';
 import { GoCQHTTPActionsExamples } from '../example/GoCQHTTPActionsExamples';
 
-
-// 历史: 兼容层构造的占位消息主体。与 NAPCAT_SPECIAL_PEER_UINS 统一配置。
-const SPECIAL_PEER_UINS: string[] = (process.env['NAPCAT_SPECIAL_PEER_UINS'] ?? '')
-  .split(',')
-  .map(s => s.trim())
-  .filter(s => /^\d+$/.test(s));
-
 const PayloadSchema = Type.Object({
   message_id: Type.Optional(Type.String({ description: '消息ID' })),
   id: Type.Optional(Type.String({ description: '消息ID' })),
@@ -113,14 +106,14 @@ export class GoCQHTTPGetForwardMsgAction extends OneBotAction<PayloadType, Retur
           peerUid: '',
         },
         peerName: '',
-        peerUid: SPECIAL_PEER_UINS[0] ?? '',
-        peerUin: SPECIAL_PEER_UINS[0] ?? '',
+        peerUid: '284840486',
+        peerUin: '284840486',
         recallTime: '0',
         records: [],
         sendNickName: '',
         sendRemarkName: '',
         senderUid: '',
-        senderUin: SPECIAL_PEER_UINS[1] ?? '',
+        senderUin: '1094950020',
         sourceType: MsgSourceType.K_DOWN_SOURCETYPE_UNKNOWN,
         subMsgType: 1,
       };

@@ -12,7 +12,7 @@
 #include <wchar.h>
 #include "MinHook.h"
 
-#define TRACE_PATH L"D:\\SnowCat.Portable\\hook-trace.txt"
+#define TRACE_PATH L".\\SnowCat.Portable\\hook-trace.txt"
 
 static HANDLE (WINAPI *origCreateFileW)(LPCWSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES, DWORD, DWORD, HANDLE) = NULL;
 static NTSTATUS (NTAPI *origNtOpenFile)(PHANDLE, ACCESS_MASK, POBJECT_ATTRIBUTES, PIO_STATUS_BLOCK, ULONG, ULONG) = NULL;

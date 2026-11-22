@@ -20,14 +20,29 @@
       .\snowcat-run.ps1 -Status        # 只看状态
 #>
 param(
-    [string]$QqUin = '<REDACTED>',
-    [string]$Shell = 'D:\SnowCat.Portable\SnowCat.9.9.37-54395.Shell',
+    [string]$QqUin = "$env:QQ_ACCOUNT",
+    [string]$Shell = ".\SnowCat.Portable\SnowCat.9.9.37-54395.Shell",
     [switch]$Stop,
     [switch]$Status
 )
 
+# ── 编码设置（必须在 param 之后，否则会破坏 param 块解析）──
+chcp 65001 | Out-Null
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding = [System.Text.Encoding]::UTF8
+
 $ErrorActionPreference = 'Stop'
-$Build = 'D:\SnowCat.Portable\tools\build'
+# 自动探测构建产物目录：优先使用脚本同级目录，其次向上查找
+$scriptDir = $PSScriptRoot
+$possibleBuildDirs = @(
+    (Join-Path $scriptDir 'tools\build'),
+    (Join-Path $scriptDir '..\tools\build'),
+    (Join-Path $scriptDir '..\..\release-tools\build')
+)
+$Build = $possibleBuildDirs | Where-Object { Test-Path (Join-Path $_ 'winmm-v8.dll') } | Select-Object -First 1
+if (-not $Build) {
+    throw "无法自动定位构建产物目录（winmm-v8.dll 所在目录）。请检查文件是否齐全，或手动指定 `$Build`。"
+}
 
 function Write-Step($m) { Write-Host "[*] $m" -ForegroundColor Cyan }
 function Write-Ok($m)   { Write-Host "[+] $m" -ForegroundColor Green }
@@ -58,14 +73,65 @@ function Get-ServiceState {
 }
 
 function Stop-Qq {
-    Get-Process QQ -ErrorAction SilentlyContinue | Stop-Process -Force
-    Start-Sleep -Seconds 2
+    param(
+        [string]$TargetShell,
+        [switch]$Quiet
+    )
+
+    if (-not $TargetShell) {
+        if (-not $Quiet) { Write-Warn2 '未指定 Shell，跳过进程清理' }
+        return 0
+    }
+
+    # 统一解析为绝对路径（兼容相对路径传参）
+    $targetShellAbs = if (Test-Path $TargetShell) {
+        (Resolve-Path $TargetShell).Path.TrimEnd('\')
+    } else {
+        $TargetShell.TrimEnd('\')
+    }
+    $shellExe    = Join-Path $targetShellAbs 'QQ.exe'
+    $shellPrefix = $targetShellAbs + '\'
+
+    # 只枚举名字以 QQ 开头的进程（QQ.exe / QQProtect.exe / QQExternal.exe 等）
+    $allProcs = @(Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
+        Where-Object { $_.Name -match '^QQ' })
+
+    $killed = 0
+    foreach ($p in $allProcs) {
+        $procPath = $p.ExecutablePath
+        $isOur = $false
+
+        if ($procPath) {
+            # 主进程：路径完全等于 Shell\QQ.exe
+            # 子进程：路径以 Shell\ 开头（versions\9.9.37-54395\QQ.exe 等）
+            if ($procPath -ieq $shellExe -or
+                $procPath.StartsWith($shellPrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
+                $isOur = $true
+            }
+        }
+
+        if ($isOur) {
+            if (-not $Quiet) {
+                Write-Host ("  [kill] PID {0,-6} {1}  {2}" -f $p.ProcessId, $p.Name, $procPath) -ForegroundColor DarkGray
+            }
+            Stop-Process -Id $p.ProcessId -Force -ErrorAction SilentlyContinue
+            $killed++
+        }
+    }
+
+    if ($killed -gt 0) {
+        Start-Sleep -Seconds 2   # 等文件句柄释放，避免 winmm.dll 被占用
+        if (-not $Quiet) { Write-Ok "已清理 $killed 个 SnowCat 进程" }
+    } elseif (-not $Quiet) {
+        Write-Step '没有需要清理的 SnowCat 进程'
+    }
+
+    return $killed
 }
 
 if ($Stop) {
-    Write-Step '停止 QQ'
-    Stop-Qq
-    Write-Ok '已停止'
+    Write-Step '停止 SnowCat（不影响其他 QQ）'
+    Stop-Qq -TargetShell $Shell
     return
 }
 
@@ -92,6 +158,8 @@ foreach ($bad in 'dbghelp.dll', 'dbgeng.dll') {
 }
 
 # ── 3. 部署侧加载代理 ────────────────────────────────────────
+Write-Step '释放 winmm.dll 句柄'
+Stop-Qq -TargetShell $Shell -Quiet
 $srcDll = Join-Path $Build 'winmm-v8.dll'
 if (-not (Test-Path $srcDll)) { throw "缺少构建产物: $srcDll" }
 Copy-Item $srcDll (Join-Path $Shell 'winmm.dll') -Force
@@ -123,6 +191,13 @@ if (-not (Test-Path (Join-Path $staticDir 'index.html'))) {
 }
 
 # ── 6. 启动 ──────────────────────────────────────────────────
+Write-Step '清理旧的 SnowCat 进程（不影响其他 QQ）'
+Stop-Qq -TargetShell $Shell
+
+foreach ($n in 'https_proxy','HTTPS_PROXY','http_proxy','HTTP_PROXY') {
+    Remove-Item "Env:$n" -ErrorAction SilentlyContinue
+}
+Remove-Item (Join-Path $Shell 'nc-boot.log') -ErrorAction SilentlyContinue
 Stop-Qq
 foreach ($n in 'https_proxy','HTTPS_PROXY','http_proxy','HTTP_PROXY') {
     Remove-Item "Env:$n" -ErrorAction SilentlyContinue
@@ -130,7 +205,13 @@ foreach ($n in 'https_proxy','HTTPS_PROXY','http_proxy','HTTP_PROXY') {
 Remove-Item (Join-Path $Shell 'nc-boot.log') -ErrorAction SilentlyContinue
 
 Write-Step "启动 QQ（账号 $QqUin）"
-$qqArgs = @("--enable-logging")
+$qqArgs = @(
+    "--enable-logging",
+    "--disable-gpu",
+    "--disable-software-rasterizer",
+    "--no-sandbox",
+    "--disable-gpu-sandbox"
+)
 if ($QqUin) { $qqArgs += @("-q", $QqUin) }
 Start-Process -FilePath (Join-Path $Shell 'QQ.exe') -ArgumentList $qqArgs -WorkingDirectory $Shell
 

@@ -56024,7 +56024,7 @@ class TN {
     if (n.length === 8 || n.length === 32) {
       const r = n.length / 2, i = n.slice(0, r), o = n.slice(r);
       if (n.every((c) => c === 0))
-        return n.length === 8 ? "0.0.0.0/0" : "::/0";
+        return n.length === 8 ? "127.0.0.1/0" : "::/0";
       const s = o.reduce((c, u) => c + (u.toString(2).match(/1/g) || []).length, 0);
       return n.length === 8 ? `${Array.from(i).join(".")}/${s}` : `${this.formatIPv6(i)}/${s}`;
     }
@@ -66737,7 +66737,7 @@ class bP extends eu {
   constructor(e, n, r, i, o) {
     super(e, n, r, i, o), this.wsServer = new hp({
       port: this.config.port,
-      host: this.config.host === "0.0.0.0" ? "" : this.config.host,
+      host: this.config.host === "127.0.0.1" ? "" : this.config.host,
       maxPayload: 50 * 1024 * 1024
       // 50 MB
     }), this.createServer(this.wsServer);
@@ -66833,7 +66833,7 @@ class bP extends eu {
     const n = this.isEnable, r = this.config.port, i = this.config.host, o = this.config.heartInterval;
     return this.config = e, e.enable && !n ? (this.open(), Gt.NetWorkOpen) : !e.enable && n ? (this.close(), Gt.NetWorkClose) : r !== e.port || i !== e.host ? (this.close(), this.wsServer = new hp({
       port: e.port,
-      host: e.host === "0.0.0.0" ? "" : e.host,
+      host: e.host === "127.0.0.1" ? "" : e.host,
       maxPayload: 50 * 1024 * 1024
       // 50 MB
     }), this.createServer(this.wsServer), e.enable && this.open(), Gt.NetWorkReload) : o !== e.heartInterval ? (this.stopHeartbeat(), e.heartInterval > 0 && this.isEnable && this.wsClientWithEvent.length > 0 && this.startHeartbeat(), Gt.NetWorkReload) : Gt.Normal;

@@ -13,7 +13,7 @@ param(
   [switch]$FromInstalled,
   [Parameter(ParameterSetName = 'Local')]
   [string]$SourceQQ = '',
-  [string]$OutDir = 'D:\SnowCat.Portable',
+  [string]$OutDir = '.\SnowCat.Portable',
   [string]$Proxy = 'http://127.0.0.1:7890'
 )
 
@@ -117,5 +117,5 @@ if ($FromOfficial) {
   Write-Host '用法:'
   Write-Host '  官网最新包→便携:  .\snowcat-portable-maker.ps1 -FromOfficial'
   Write-Host '  已装QQ→便携:      .\snowcat-portable-maker.ps1 -FromInstalled [-SourceQQ C:\...\QQ.exe]'
-  Write-Host '  输出目录:          -OutDir D:\SnowCat.Portable'
+  Write-Host '  输出目录:          -OutDir .\SnowCat.Portable'
 }

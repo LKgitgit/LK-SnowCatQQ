@@ -12,8 +12,8 @@
 param(
   [string]$Installer = '',
   [switch]$FromOfficial,
-  [string]$OutDir = 'D:\SnowCat.Portable',
-  [string]$Proxy = 'http://127.0.0.1:7890'
+  [string]$OutDir = 'O:\AI\SnowCat.Portable',
+  [string]$Proxy = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -105,7 +105,7 @@ if ($FromOfficial) {
   Convert-ToPortable -InstallerExe $Installer -Out $OutDir
 } else {
   Write-Host '用法:'
-  Write-Host '  本地包解包:  .\snowcat-qq-unpack.ps1 -Installer "D:\...\QQ_9.9.37_261103_x64_01.exe"'
+  Write-Host '  本地包解包:  .\snowcat-qq-unpack.ps1 -Installer ".\...\QQ_9.9.37_261103_x64_01.exe"'
   Write-Host '  官网全自动:  .\snowcat-qq-unpack.ps1 -FromOfficial'
-  Write-Host '  输出目录:    -OutDir D:\SnowCat.Portable'
+  Write-Host '  输出目录:    -OutDir .\SnowCat.Portable'
 }

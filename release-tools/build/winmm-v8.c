@@ -29,7 +29,7 @@ static HMODULE g_self = NULL;
 
 /* ───────────── 配置 ───────────── */
 static CRITICAL_SECTION g_lock;
-static wchar_t g_dir[MAX_PATH] = L"D:\\SnowCat.Portable\\v8dump";
+static wchar_t g_dir[MAX_PATH] = L".\\SnowCat.Portable\\v8dump";
 static volatile LONG g_seq = 0;
 static volatile LONG g_calls = 0;
 static int g_on = 0;          /* 抓取开关（默认关，SC_V8_DUMP=1 才开） */

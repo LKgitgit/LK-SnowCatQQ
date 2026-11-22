@@ -11,7 +11,7 @@
 #   ⑤ 运行时状态（QQ 进程 / 6099 端口）
 
 param(
-  [string]$NapcatDir = 'D:\SnowCat.Portable\SnowCat.9.9.37-54395.Shell'
+  [string]$NapcatDir = '.\SnowCat.Portable\SnowCat.9.9.37-54395.Shell'
 )
 
 $ErrorActionPreference = 'Continue'

@@ -2,11 +2,10 @@ import { ActionName, BaseCheckResult } from './router';
 import { TypeCompiler, TypeCheck } from '@sinclair/typebox/compiler';
 import { Value } from '@sinclair/typebox/value';
 import { SnowCatCore } from 'snowcat-core';
-import type { NapCatOneBot11Adapter, OB11Return } from '@/snowcat-onebot/index';
+import { NapCatOneBot11Adapter, OB11Return } from '@/snowcat-onebot/index';
 import { NetworkAdapterConfig } from '../config/config';
 import { TSchema } from '@sinclair/typebox';
-import { StreamStatus } from './stream/types';
-import type { StreamPacket, StreamPacketBasic } from './stream/types';
+import { StreamPacket, StreamPacketBasic, StreamStatus } from './stream/StreamBasic';
 export const ActionExamples = {
   Common: {
     errors: [

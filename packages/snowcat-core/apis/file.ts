@@ -25,16 +25,6 @@ export class NTQQFileApi {
   packetRkey: Array<{ rkey: string; time: number; type: number; ttl: bigint; }> | undefined;
   private fetchRkeyFailures: number = 0;
   private readonly MAX_RKEY_FAILURES: number = 8;
-
-  constructor (context: InstanceContext, core: SnowCatCore) {
-    this.context = context;
-    this.core = core;
-    this.rkeyManager = new RkeyManager([
-      'http://ss.xingzhige.com/music_card/rkey',
-      'https://secret-service.bietiaop.com/rkeys',
-    ],
-    this.context.logger
-    );
   }
 
   private async fetchRkeyWithRetry () {

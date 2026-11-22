@@ -1,5 +1,3 @@
-type OneBotProtocol = 'v11' | 'v12';
-
 interface AdapterConfigInner {
   name: string;
   enable: boolean;
@@ -14,7 +12,6 @@ interface AdapterConfig extends AdapterConfigInner {
 type MessageFormat = 'array' | 'string';
 
 interface HttpServerConfig extends AdapterConfig {
-  protocol: 'v11' | 'v12';
   port: number;
   host: string;
   enableCors: boolean;
@@ -23,14 +20,12 @@ interface HttpServerConfig extends AdapterConfig {
 }
 
 interface HttpClientConfig extends AdapterConfig {
-  protocol: 'v11' | 'v12';
   url: string;
   messagePostFormat: MessageFormat;
   reportSelfMessage: boolean;
 }
 
 interface WebsocketServerConfig extends AdapterConfig {
-  protocol: 'v11' | 'v12';
   host: string;
   port: number;
   messagePostFormat: MessageFormat;
@@ -40,7 +35,6 @@ interface WebsocketServerConfig extends AdapterConfig {
 }
 
 interface WebsocketClientConfig extends AdapterConfig {
-  protocol: 'v11' | 'v12';
   url: string;
   messagePostFormat: MessageFormat;
   reportSelfMessage: boolean;
@@ -60,13 +54,6 @@ interface McpServerConfig extends AdapterConfig {
   port: number;
 }
 
-interface MilkyServerConfig extends AdapterConfig {
-  host: string;
-  port: number;
-  enableCors: boolean;
-  enableWebsocket: boolean;
-}
-
 interface NetworkConfig {
   httpServers: Array<HttpServerConfig>;
   httpClients: Array<HttpClientConfig>;
@@ -74,7 +61,6 @@ interface NetworkConfig {
   websocketServers: Array<WebsocketServerConfig>;
   websocketClients: Array<WebsocketClientConfig>;
   mcpServers: Array<McpServerConfig>;
-  milkyServers: Array<MilkyServerConfig>;
 }
 
 interface TimeoutConfig {

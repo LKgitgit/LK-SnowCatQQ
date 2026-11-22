@@ -5,11 +5,12 @@ dist.bak*/
 *.pdb
 *.lib
 *.exe
-
-# standalone 运行时产物
-standalone-config/
-standalone-plugins/
-scripts/standalone/standalone-run.log
-packages/snowcat-test/.selftest-config/
-packages/snowcat-develop/napcat/
-packages/napcat-shell/
+QQNT/
+SnowCat.Portable/
+node_modules/
+login.json
+device.json
+*.token
+nc-boot.log
+cache/
+*.log

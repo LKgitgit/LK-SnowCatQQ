@@ -38,7 +38,7 @@ const ServerConfigCard = () => {
     enableXForwardedFor: boolean;
   }>({
     defaultValues: {
-      host: '0.0.0.0',
+      host: '127.0.0.1',
       port: 6099,
       loginRate: 10,
       disableWebUI: false,
@@ -162,7 +162,7 @@ const ServerConfigCard = () => {
                 {...field}
                 label='监听地址'
                 placeholder='请输入监听地址'
-                description='服务器监听的IP地址，0.0.0.0表示监听所有网卡'
+                description='服务器监听的IP地址，127.0.0.1表示监听所有网卡'
                 isDisabled={!!configError}
                 errorMessage={configError ? '获取配置失败' : undefined}
                 classNames={{
@@ -295,7 +295,7 @@ const ServerConfigCard = () => {
                   <div className='space-y-0.5 font-mono'>
                     <div>• 127.0.0.1 (IPv4 本地回环)</div>
                     <div>• 192.168.1.* (IPv4 通配符)</div>
-                    <div>• 10.0.0.0/8 (IPv4 CIDR)</div>
+                    <div>• 1127.0.0.1/8 (IPv4 CIDR)</div>
                     <div>• ::1 (IPv6 本地回环)</div>
                     <div>• 2001:db8::/32 (IPv6 CIDR)</div>
                   </div>

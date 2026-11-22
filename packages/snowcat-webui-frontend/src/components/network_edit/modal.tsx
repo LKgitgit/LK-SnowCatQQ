@@ -8,7 +8,6 @@ import HTTPClientForm from './http_client';
 import HTTPServerForm from './http_server';
 import HTTPServerSSEForm from './http_sse';
 import McpServerForm from './mcp_server';
-import MilkyServerForm from './milky_server';
 import WebsocketClientForm from './ws_client';
 import WebsocketServerForm from './ws_server';
 
@@ -19,7 +18,6 @@ const modalTitle = {
   websocketServers: 'Websocket Server',
   websocketClients: 'Websocket Client',
   mcpServers: 'MCP Server',
-  milkyServers: 'Milky Server',
 };
 
 export interface NetworkFormModalProps<
@@ -135,14 +133,6 @@ const NetworkFormModal = <T extends keyof OneBotConfig['network']> (
         return (
           <McpServerForm
             data={data as OneBotConfig['network']['mcpServers'][0]}
-            onClose={onClose}
-            onSubmit={onSubmit}
-          />
-        );
-      case 'milkyServers':
-        return (
-          <MilkyServerForm
-            data={data as OneBotConfig['network']['milkyServers'][0]}
             onClose={onClose}
             onSubmit={onSubmit}
           />

@@ -2,12 +2,9 @@ import { Type, Static } from '@sinclair/typebox';
 import { TypeCompiler } from '@sinclair/typebox/compiler';
 import { Value } from '@sinclair/typebox/value';
 export type MessageFormat = 'array' | 'string';
-/** OneBot 协议版本。v11 已弃用，仅保留兼容期，新接入请用 v12 */
-export type OneBotProtocol = 'v11' | 'v12';
 
 const HttpServerConfigSchema = Type.Object({
   name: Type.String({ default: 'http-server' }),
-  protocol: Type.String({ default: 'v12', description: 'OneBot 协议版本：v12（默认）或 v11（已弃用）' }),
   enable: Type.Boolean({ default: false }),
   port: Type.Number({ default: 3000 }),
   host: Type.String({ default: '127.0.0.1' }),
@@ -20,7 +17,6 @@ const HttpServerConfigSchema = Type.Object({
 
 const HttpSseServerConfigSchema = Type.Object({
   name: Type.String({ default: 'http-sse-server' }),
-  protocol: Type.String({ default: 'v12', description: 'OneBot 协议版本：v12（默认）或 v11（已弃用）' }),
   enable: Type.Boolean({ default: false }),
   port: Type.Number({ default: 3000 }),
   host: Type.String({ default: '127.0.0.1' }),
@@ -34,7 +30,6 @@ const HttpSseServerConfigSchema = Type.Object({
 
 const HttpClientConfigSchema = Type.Object({
   name: Type.String({ default: 'http-client' }),
-  protocol: Type.String({ default: 'v12', description: 'OneBot 协议版本：v12（默认）或 v11（已弃用）' }),
   enable: Type.Boolean({ default: false }),
   url: Type.String({ default: 'http://localhost:8080' }),
   messagePostFormat: Type.String({ default: 'array' }),
@@ -45,7 +40,6 @@ const HttpClientConfigSchema = Type.Object({
 
 const WebsocketServerConfigSchema = Type.Object({
   name: Type.String({ default: 'websocket-server' }),
-  protocol: Type.String({ default: 'v12', description: 'OneBot 协议版本：v12（默认）或 v11（已弃用）' }),
   enable: Type.Boolean({ default: false }),
   host: Type.String({ default: '127.0.0.1' }),
   port: Type.Number({ default: 3001 }),
@@ -59,7 +53,6 @@ const WebsocketServerConfigSchema = Type.Object({
 
 const WebsocketClientConfigSchema = Type.Object({
   name: Type.String({ default: 'websocket-client' }),
-  protocol: Type.String({ default: 'v12', description: 'OneBot 协议版本：v12（默认）或 v11（已弃用）' }),
   enable: Type.Boolean({ default: false }),
   url: Type.String({ default: 'ws://localhost:8082' }),
   messagePostFormat: Type.String({ default: 'array' }),
@@ -88,19 +81,6 @@ const McpServerConfigSchema = Type.Object({
   debug: Type.Boolean({ default: false }),
 });
 
-// Milky 协议服务端配置（milky.ntqqrev.org v1.3，默认关闭）
-const MilkyServerConfigSchema = Type.Object({
-  name: Type.String({ default: 'milky-server' }),
-  enable: Type.Boolean({ default: false }),
-  host: Type.String({ default: '127.0.0.1' }),
-  port: Type.Number({ default: 3100 }),
-  token: Type.String({ default: '' }),
-  enableCors: Type.Boolean({ default: true }),
-  enableWebsocket: Type.Boolean({ default: false }),
-  webhooks: Type.Array(Type.String(), { default: [] }),
-  debug: Type.Boolean({ default: false }),
-});
-
 const NetworkConfigSchema = Type.Object({
   httpServers: Type.Array(HttpServerConfigSchema, { default: [] }),
   httpSseServers: Type.Array(HttpSseServerConfigSchema, { default: [] }),
@@ -108,7 +88,6 @@ const NetworkConfigSchema = Type.Object({
   websocketServers: Type.Array(WebsocketServerConfigSchema, { default: [] }),
   websocketClients: Type.Array(WebsocketClientConfigSchema, { default: [] }),
   mcpServers: Type.Optional(Type.Array(McpServerConfigSchema, { default: [] })),
-  milkyServers: Type.Optional(Type.Array(MilkyServerConfigSchema, { default: [] })),
   plugins: Type.Array(PluginConfigSchema, { default: [] }),
 }, { default: {} });
 
@@ -136,9 +115,8 @@ export type WebsocketServerConfig = Static<typeof WebsocketServerConfigSchema>;
 export type WebsocketClientConfig = Static<typeof WebsocketClientConfigSchema>;
 export type PluginConfig = Static<typeof PluginConfigSchema>;
 export type McpServerConfig = Static<typeof McpServerConfigSchema>;
-export type MilkyServerConfig = Static<typeof MilkyServerConfigSchema>;
 
-export type NetworkAdapterConfig = HttpServerConfig | HttpSseServerConfig | HttpClientConfig | WebsocketServerConfig | WebsocketClientConfig | McpServerConfig | MilkyServerConfig | PluginConfig;
+export type NetworkAdapterConfig = HttpServerConfig | HttpSseServerConfig | HttpClientConfig | WebsocketServerConfig | WebsocketClientConfig | McpServerConfig | PluginConfig;
 export type NetworkConfigKey = keyof OneBotConfig['network'];
 
 export function loadConfig (config: Partial<OneBotConfig>): OneBotConfig {

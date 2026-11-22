@@ -47,10 +47,10 @@ const isDocker = () => {
  * 获取默认host地址
  * @returns 根据环境返回合适的host地址
  * @example getDefaultHost() => '127.0.0.1' // 非Docker环境
- * @example getDefaultHost() => '0.0.0.0'   // Docker环境
+ * @example getDefaultHost() => '127.0.0.1'   // Docker环境
  */
 export const getDefaultHost = (): string => {
-  return isDocker() ? '0.0.0.0' : '127.0.0.1';
+  return isDocker() ? '127.0.0.1' : '127.0.0.1';
 };
 
 /**
@@ -58,7 +58,7 @@ export const getDefaultHost = (): string => {
  * @param host 主机地址
  * @returns 标准格式的IP地址
  * @example normalizeHost('10.0.3.2') => '10.0.3.2'
- * @example normalizeHost('0.0.0.0') => '127.0.0.1'
+ * @example normalizeHost('127.0.0.1') => '127.0.0.1'
  * @example normalizeHost('2001:4860:4801:51::27') => '[2001:4860:4801:51::27]'
  */
 export const normalizeHost = (host: string) => {

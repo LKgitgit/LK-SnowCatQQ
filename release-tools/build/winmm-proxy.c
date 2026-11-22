@@ -148,7 +148,7 @@ static int g_inited = 0;
 static void* g_real = 0;
 
 static void appendLog(const char* msg, unsigned long len) {
-    HANDLE f = CreateFileW(L"D:\\SnowCat.Portable\\winmm-proxy.txt",
+    HANDLE f = CreateFileW(L".\\SnowCat.Portable\\winmm-proxy.txt",
                            (DWORD)0x40000000 /*GENERIC_WRITE*/, 3 /*FILE_SHARE_READ|WRITE*/,
                            0, 4 /*OPEN_ALWAYS*/, 0x80, 0);
     if (f != (HANDLE)-1 && f) {

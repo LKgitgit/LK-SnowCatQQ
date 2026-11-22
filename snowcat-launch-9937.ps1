@@ -1,7 +1,7 @@
 ﻿# SnowCat 9.9.37 适配验证启动（一次性脚本，复用 snowcat-launch 逻辑）
 $ErrorActionPreference = 'Stop'
 $NapcatDir = 'C:\dsh\.tmp\napcat-shell'
-$QQPath = 'D:\SnowCat.Portable\SnowCat.9.9.37-54395.Shell\QQ.exe'
+$QQPath = '.\SnowCat.Portable\SnowCat.9.9.37-54395.Shell\QQ.exe'
 $root = Split-Path $QQPath -Parent
 $app = Get-ChildItem (Join-Path $root 'versions') -Directory | ForEach-Object {
   $pj = Join-Path $_.FullName 'resources\app\package.json'
@@ -39,5 +39,5 @@ $env:NAPCAT_INJECT_PATH = Join-Path $NapcatDir 'NapCatWinBootHook.dll'
 $env:NAPCAT_MAIN_PATH = $mainJs
 Write-Host ("[OK] qqnt=" + $app.version + " build=" + $qqnt['buildVersion'])
 $logFile = Join-Path $NapcatDir ('snowcat-boot5-' + (Get-Date -Format 'HHmmss') + '.log')
-Start-Process -FilePath (Join-Path $NapcatDir 'NapCatWinBootMain.exe') -ArgumentList ('"' + $QQPath + '"', '"' + (Join-Path $NapcatDir 'NapCatWinBootHook.dll') + '"', '-q<Account>') -WindowStyle Hidden -RedirectStandardError $logFile
+Start-Process -FilePath (Join-Path $NapcatDir 'NapCatWinBootMain.exe') -ArgumentList ('"' + $QQPath + '"', '"' + (Join-Path $NapcatDir 'NapCatWinBootHook.dll') + '"', '-q3430961870') -WindowStyle Hidden -RedirectStandardError $logFile
 Write-Host 'launched'
