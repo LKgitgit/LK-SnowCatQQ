@@ -7,15 +7,24 @@ GPU渲染崩溃风险、中文编码乱码、cleanupOrphanedProcesses() 自杀�
 <img width="558" height="353" alt="image" src="https://github.com/user-attachments/assets/7c06c49f-6f71-44e5-896d-b988761b2afd" />
 
 像这样丢进去。找到路径.\release-tools\build用powershell运行snowcat-run.ps1
+
  启动前检查（非常重要）
 Node 依赖装了吗？
+
 --powershell
+
 npm install express ws
+
 环境变量配了吗？
+
 --powershell
+
 $env:QQ_ACCOUNT="你的测试QQ号"
+
 poweshell管理运行
+
 cd snowcat安装路径\SnowCat\release-tools\build
+
 .\snowcat-run.ps1 -QqUin "你的测试QQ号" -Shell "QQNT的路径，或直接填上边路径.\SnowCat\QQNT"
 
 有问题就把报错丢给deepseek看，记得附带本仓库链接，非常感谢ds的指导，耗时一上午才得以勉强运行。
